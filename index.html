@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Export Business Model: Guar Gum (HS 130232) | Gauri Mahendru</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome / Lucide icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+              700: '#15803d',
+              800: '#166534',
+              900: '#14532d',
+            },
+            accent: {
+              500: '#0284c7',
+              600: '#0369a1',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    input[type=range] {
+      accent-color: #16a34a;
+    }
+    .step-card {
+      transition: all 0.2s ease-in-out;
+    }
+    .active-tab {
+      border-bottom: 3px solid #16a34a;
+      color: #166534;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- TOP HEADER -->
+  <header class="bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="bg-emerald-500 text-slate-950 text-xs font-bold px-2 py-0.5 rounded tracking-wide uppercase">Trade Analytics</span>
+          <span class="text-xs text-slate-300">Individual Assignment • Session 8 Model</span>
+        </div>
+        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+          <i class="fa-solid fa-seedling text-emerald-400"></i> Guar Gum Export Business Model
+        </h1>
+        <p class="text-xs text-emerald-200">
+          HS Code: <span class="font-mono font-bold text-white">130232</span> | Student: <span class="font-semibold text-white">Gauri Mahendru</span> (DM271025)
+        </p>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button onclick="resetDefaults()" class="bg-slate-700 hover:bg-slate-600 text-xs text-slate-200 px-3 py-1.5 rounded-lg border border-slate-600 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-rotate-left"></i> Reset Defaults
+        </button>
+        <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white px-3 py-1.5 rounded-lg shadow transition flex items-center gap-1.5">
+          <i class="fa-solid fa-print"></i> Print / Save PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- DYNAMIC LIVE SUMMARY PANEL (Sticky Header) -->
+    <div class="bg-slate-900/95 border-t border-slate-700/80 backdrop-blur px-4 py-2.5">
+      <div class="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 text-center">
+        
+        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Chosen Market</span>
+          <span id="sum-market" class="text-sm font-bold text-emerald-400">Germany</span>
+        </div>
+
+        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Year 1 Volume</span>
+          <span id="sum-volume" class="text-sm font-bold text-white">480 MT</span>
+        </div>
+
+        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Gross Revenue</span>
+          <span id="sum-revenue" class="text-sm font-bold text-cyan-300">$1,536,000</span>
+        </div>
+
+        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Total Costs</span>
+          <span id="sum-costs" class="text-sm font-bold text-amber-300">$1,306,400</span>
+        </div>
+
+        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Net Profit (EBIT)</span>
+          <span id="sum-profit" class="text-sm font-bold text-emerald-300">+$229,600 (15%)</span>
+        </div>
+
+        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Break-Even (BEP)</span>
+          <span id="sum-bep" class="text-sm font-bold text-violet-300">181.8 MT</span>
+        </div>
+
+        <div class="bg-slate-800/80 p-2 rounded-lg border border-slate-700 col-span-2 sm:col-span-1">
+          <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Worst-Case Profit</span>
+          <span id="sum-worst" class="text-sm font-bold text-rose-300">+$17,488</span>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- STEP NAVIGATION TABS -->
+  <nav class="bg-white border-b border-slate-200 sticky top-[105px] z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 flex overflow-x-auto space-x-1 sm:space-x-4 py-1 text-sm font-medium">
+      <button onclick="showStep(1)" id="tab-1" class="tab-btn px-3 py-2 text-slate-600 hover:text-emerald-700 active-tab whitespace-nowrap">
+        <i class="fa-solid fa-box mr-1"></i> 1. Product & Code
+      </button>
+      <button onclick="showStep(2)" id="tab-2" class="tab-btn px-3 py-2 text-slate-600 hover:text-emerald-700 whitespace-nowrap">
+        <i class="fa-solid fa-trophy mr-1"></i> 2. India's Edge
+      </button>
+      <button onclick="showStep(3)" id="tab-3" class="tab-btn px-3 py-2 text-slate-600 hover:text-emerald-700 whitespace-nowrap">
+        <i class="fa-solid fa-map-location-dot mr-1"></i> 3. Market Choice
+      </button>
+      <button onclick="showStep(4)" id="tab-4" class="tab-btn px-3 py-2 text-slate-600 hover:text-emerald-700 whitespace-nowrap">
+        <i class="fa-solid fa-calculator mr-1"></i> 4. How Much (Volume)
+      </button>
+      <button onclick="showStep(5)" id="tab-5" class="tab-btn px-3 py-2 text-slate-600 hover:text-emerald-700 whitespace-nowrap">
+        <i class="fa-solid fa-chart-line mr-1"></i> 5. Money & Risk
+      </button>
+      <button onclick="showStep(6)" id="tab-6" class="tab-btn px-3 py-2 text-slate-600 hover:text-emerald-700 whitespace-nowrap">
+        <i class="fa-solid fa-shield-halved mr-1"></i> 6. Access & Execution
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full">
+
+    <!-- ========================================== -->
+    <!-- STEP 1: PRODUCT & HS CODE -->
+    <!-- ========================================== -->
+    <section id="step-1" class="step-content space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-center justify-between border-b pb-4 mb-6">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Step 1 of 6</span>
+            <h2 class="text-2xl font-bold text-slate-900">Product & HS Code Architecture</h2>
+          </div>
+          <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
+            ITC HS: 1302.32.20 / 130232
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Col 1 -->
+          <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+            <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-leaf text-emerald-600"></i> Agricultural Product Identity
+            </h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              <strong>Guar Gum</strong> is derived from the endosperm of the drought-hardy cluster bean seed (<em>Cyamopsis tetragonoloba</em>). Over 70% of global cultivation takes place in the arid fields of Western Rajasthan (Jodhpur, Bikaner, Nagaur, Barmer), with Haryana and Gujarat contributing the rest.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-200 text-xs text-slate-500">
+              <strong>Harvest Season:</strong> October – December (Kharif crop).
+            </div>
+          </div>
+
+          <!-- Col 2 -->
+          <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+            <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-barcode text-cyan-600"></i> Customs Classification
+            </h3>
+            <ul class="text-sm space-y-2 text-slate-700">
+              <li><span class="font-mono font-bold bg-slate-200 px-1 rounded">130232</span>: <em>Mucilages and thickeners, whether or not modified, derived from locust beans, locust bean seeds or guar seeds.</em></li>
+              <li><span class="font-mono text-xs bg-slate-200 px-1 rounded">1302.32.20</span>: Guar gum treated and pulverized (Food/Technical grade).</li>
+              <li><span class="font-mono text-xs bg-slate-200 px-1 rounded">1302.32.30</span>: Chemically modified guar gum.</li>
+            </ul>
+          </div>
+
+          <!-- Col 3 -->
+          <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+            <h3 class="font-bold text-slate-800 text-base mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-flask-vial text-purple-600"></i> Target Export Grade
+            </h3>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              <strong>Refined Food-Grade E412 Guar Gum:</strong> 200 mesh particle size, rapid cold-water hydration, 5,000–6,000 cps viscosity (1% aqueous solution). Acts as a clean-label texturizer, moisture retention stabilizer in vegan foods, dairy, bakery, and sauces.
+            </p>
+            <div class="mt-4 pt-4 border-t border-slate-200 flex items-center justify-between">
+              <span class="text-xs font-semibold text-slate-700">Target Segment:</span>
+              <span class="bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded font-bold">Food Ingredients (E412)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 p-4 bg-emerald-50 rounded-lg border border-emerald-200 flex items-start gap-3">
+          <i class="fa-solid fa-lightbulb text-emerald-600 text-lg mt-0.5"></i>
+          <div class="text-sm text-emerald-950">
+            <strong>Strategic Focus:</strong> While India traditionally exports massive bulk volumes of low-margin fast-hydrating industrial guar for oilfield hydraulic fracturing (fracking), this export business model targets <strong>premium food-grade E412 powder</strong>. This provides higher, defensible margins ($3,200/MT vs $1,600/MT industrial) and complete insulation from volatile crude oil prices.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 2: INDIA'S EDGE & RCA -->
+    <!-- ========================================== -->
+    <section id="step-2" class="step-content hidden space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-center justify-between border-b pb-4 mb-6">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Step 2 of 6</span>
+            <h2 class="text-2xl font-bold text-slate-900">India's Global Competitive Edge</h2>
+          </div>
+          <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full">
+            ITC Trade Map / UN Comtrade Evidence
+          </span>
+        </div>
+
+        <!-- 4 Stat Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+            <span class="text-xs text-slate-500 font-semibold block uppercase">World Export Value</span>
+            <span class="text-2xl font-extrabold text-slate-900">$820.5M</span>
+            <span class="text-xs text-slate-400 block mt-1">HS 130232 Total</span>
+          </div>
+
+          <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-center">
+            <span class="text-xs text-emerald-700 font-semibold block uppercase">India Export Value & Share</span>
+            <span class="text-2xl font-extrabold text-emerald-700">$440.2M (53.7%)</span>
+            <span class="text-xs text-emerald-600 block mt-1">>80% of World Guar Gum</span>
+          </div>
+
+          <div class="bg-cyan-50 p-4 rounded-xl border border-cyan-200 text-center">
+            <span class="text-xs text-cyan-700 font-semibold block uppercase">India World Rank</span>
+            <span class="text-2xl font-extrabold text-cyan-800">#1 Globally</span>
+            <span class="text-xs text-cyan-600 block mt-1">Monopoly Producer</span>
+          </div>
+
+          <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 text-center">
+            <span class="text-xs text-purple-700 font-semibold block uppercase">Revealed Comp. Advantage</span>
+            <span class="text-2xl font-extrabold text-purple-700">RCA = 29.48</span>
+            <span class="text-xs text-purple-600 block mt-1">> 1 indicates extreme edge</span>
+          </div>
+        </div>
+
+        <!-- RCA Calculation Box -->
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 mb-6">
+          <h3 class="font-bold text-slate-900 mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-calculator text-emerald-600"></i> Revealed Comparative Advantage (RCA) Formula
+          </h3>
+          <p class="text-xs text-slate-600 mb-3">
+            Using the classic Balassa formulation:
+            <code class="bg-slate-200 px-1 py-0.5 rounded text-slate-800 font-mono">RCA = (India's exports of HS 130232 / India's total exports) / (World exports of HS 130232 / World total exports)</code>
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <div class="bg-white p-3 rounded border border-slate-200">
+              <span class="text-xs text-slate-500 block">India Export Share in HS 130232</span>
+              <span class="font-mono font-bold">$0.4402B / $437.1B = 0.1007%</span>
+            </div>
+            <div class="bg-white p-3 rounded border border-slate-200">
+              <span class="text-xs text-slate-500 block">World Export Share in HS 130232</span>
+              <span class="font-mono font-bold">$0.8205B / $24,010B = 0.00342%</span>
+            </div>
+            <div class="bg-purple-100 p-3 rounded border border-purple-300">
+              <span class="text-xs text-purple-800 font-bold block">Resulting Balassa RCA</span>
+              <span class="font-mono font-extrabold text-purple-900 text-lg">29.48 (Extreme Advantage)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unit Value Analysis & Rival Exporters -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Unit Value Table -->
+          <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-3 border-b">
+              <h4 class="font-bold text-slate-800 text-sm">Unit Value Comparison (USD / MT)</h4>
+            </div>
+            <div class="p-4">
+              <table class="w-full text-xs text-left">
+                <thead class="bg-slate-50 border-b">
+                  <tr>
+                    <th class="p-2">Exporter</th>
+                    <th class="p-2">Export Value</th>
+                    <th class="p-2">Volume (MT)</th>
+                    <th class="p-2">Unit Value ($/MT)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y text-slate-700">
+                  <tr class="font-semibold bg-emerald-50/50">
+                    <td class="p-2 font-bold text-emerald-800">India</td>
+                    <td class="p-2">$440.2M</td>
+                    <td class="p-2">225,740</td>
+                    <td class="p-2 font-mono font-bold text-emerald-700">$1,950</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2">World Average</td>
+                    <td class="p-2">$820.5M</td>
+                    <td class="p-2">309,600</td>
+                    <td class="p-2 font-mono font-bold">$2,650</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2">Pakistan (Rival 1)</td>
+                    <td class="p-2">$65.2M</td>
+                    <td class="p-2">38,350</td>
+                    <td class="p-2 font-mono text-slate-600">$1,700</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2">Spain (Rival 2 - Carob)</td>
+                    <td class="p-2">$110.4M</td>
+                    <td class="p-2">6,050</td>
+                    <td class="p-2 font-mono text-rose-600 font-bold">$18,248</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2">China (Rival 3 - Mod.)</td>
+                    <td class="p-2">$52.0M</td>
+                    <td class="p-2">17,330</td>
+                    <td class="p-2 font-mono text-slate-600">$3,000</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="mt-3 p-2.5 bg-amber-50 rounded text-xs text-amber-900 border border-amber-200 leading-relaxed">
+                <strong>Why is India's unit value ($1,950) below world average ($2,650)?</strong><br/>
+                HS 130232 merges <em>Guar gum</em> with Mediterranean <em>Locust Bean Gum (Carob)</em> from Spain/Italy. Carob trades at an astronomical <strong>$18,000+/MT</strong> due to tree supply shortages, pulling up the world average. Our food-grade guar ($3,200/MT) is positioned as an economical, clean-label substitute.
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Rivals -->
+          <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div class="bg-slate-100 px-4 py-3 border-b">
+              <h4 class="font-bold text-slate-800 text-sm">Top 3 Rival Exporters Analysis</h4>
+            </div>
+            <div class="p-4 space-y-3 text-xs">
+              <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                <div class="flex justify-between font-bold text-slate-800 mb-1">
+                  <span>1. Pakistan (Direct Competitor)</span>
+                  <span class="text-emerald-700">7.9% Share | $65.2M</span>
+                </div>
+                <p class="text-slate-600">
+                  Competes in raw splits and standard industrial grade. Has lower technological capabilities for fine mesh food pulverization and lack of European audit certifications.
+                </p>
+              </div>
+
+              <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                <div class="flex justify-between font-bold text-slate-800 mb-1">
+                  <span>2. Spain (Substitute Competitor)</span>
+                  <span class="text-emerald-700">13.5% Share | $110.4M</span>
+                </div>
+                <p class="text-slate-600">
+                  Supplies Locust Bean Gum (LBG) at $18,000+/MT. Chronic droughts in Mediterranean groves create severe supply deficits, driving food formulators to switch to Indian food-grade guar.
+                </p>
+              </div>
+
+              <div class="p-2.5 bg-slate-50 rounded border border-slate-200">
+                <div class="flex justify-between font-bold text-slate-800 mb-1">
+                  <span>3. China (Downstream Re-processor)</span>
+                  <span class="text-emerald-700">6.3% Share | $52.0M</span>
+                </div>
+                <p class="text-slate-600">
+                  Imports raw guar splits from India, performs chemical derivatization into hydroxypropyl and cationic guar, and re-exports at high margins.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 3: WHERE (MARKET SELECTION) -->
+    <!-- ========================================== -->
+    <section id="step-3" class="step-content hidden space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex flex-wrap items-center justify-between border-b pb-4 mb-6 gap-2">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Step 3 of 6</span>
+            <h2 class="text-2xl font-bold text-slate-900">Market Shortlist & Weighted Scorecard</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="applyPresetWeights('value')" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1.5 rounded-lg border border-emerald-300 transition">
+              Base: Value & Margin Model
+            </button>
+            <button onclick="applyPresetWeights('volume')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-lg border border-amber-300 transition">
+              Robustness: Volume Model
+            </button>
+          </div>
+        </div>
+
+        <!-- 5 Shortlisted Markets Evidence Table -->
+        <div class="mb-6 overflow-x-auto">
+          <h3 class="font-bold text-slate-800 text-sm mb-2">Shortlist of 5 Major Importing Markets (Data Evidence)</h3>
+          <table class="w-full text-xs text-left border rounded-lg overflow-hidden">
+            <thead class="bg-slate-100 border-b text-slate-700 font-bold">
+              <tr>
+                <th class="p-2.5">Target Country</th>
+                <th class="p-2.5">Import Value (USD M)</th>
+                <th class="p-2.5">5-Yr CAGR</th>
+                <th class="p-2.5">Unit Value ($/MT)</th>
+                <th class="p-2.5">India Share (%)</th>
+                <th class="p-2.5">Market Character & End-Use</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y text-slate-700">
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 font-bold flex items-center gap-1.5">
+                  <span class="text-base">🇺🇸</span> United States
+                </td>
+                <td class="p-2.5 font-mono">$265.4M</td>
+                <td class="p-2.5 font-mono text-emerald-600 font-bold">+6.8%</td>
+                <td class="p-2.5 font-mono">$2,150</td>
+                <td class="p-2.5 font-mono">82.5%</td>
+                <td class="p-2.5 text-slate-500">Massive volume; oilfield hydraulic fracturing cyclical demand</td>
+              </tr>
+              <tr class="hover:bg-emerald-50/50 bg-emerald-50/30">
+                <td class="p-2.5 font-bold text-emerald-900 flex items-center gap-1.5">
+                  <span class="text-base">🇩🇪</span> Germany (Selected)
+                </td>
+                <td class="p-2.5 font-mono">$118.2M</td>
+                <td class="p-2.5 font-mono text-emerald-600 font-bold">+4.2%</td>
+                <td class="p-2.5 font-mono text-emerald-700 font-bold">$4,850</td>
+                <td class="p-2.5 font-mono font-bold text-purple-700">46.2%</td>
+                <td class="p-2.5 text-slate-700">Highest unit value; clean-label food/dairy E412 & pharma; low saturation</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 font-bold flex items-center gap-1.5">
+                  <span class="text-base">🇨🇳</span> China
+                </td>
+                <td class="p-2.5 font-mono">$78.0M</td>
+                <td class="p-2.5 font-mono text-emerald-600 font-bold">+8.5%</td>
+                <td class="p-2.5 font-mono text-slate-500">$1,420</td>
+                <td class="p-2.5 font-mono">89.1%</td>
+                <td class="p-2.5 text-slate-500">Low price; mostly raw splits for domestic re-derivatization</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 font-bold flex items-center gap-1.5">
+                  <span class="text-base">🇷🇺</span> Russia
+                </td>
+                <td class="p-2.5 font-mono">$48.5M</td>
+                <td class="p-2.5 font-mono text-emerald-600 font-bold">+11.2%</td>
+                <td class="p-2.5 font-mono">$2,050</td>
+                <td class="p-2.5 font-mono">91.0%</td>
+                <td class="p-2.5 text-slate-500">Domestic drilling; sanctions risk; Rupee-Rouble settlement mechanism</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-2.5 font-bold flex items-center gap-1.5">
+                  <span class="text-base">🇳🇴</span> Norway
+                </td>
+                <td class="p-2.5 font-mono">$34.1M</td>
+                <td class="p-2.5 font-mono text-emerald-600 font-bold">+5.1%</td>
+                <td class="p-2.5 font-mono">$2,480</td>
+                <td class="p-2.5 font-mono">78.4%</td>
+                <td class="p-2.5 text-slate-500">Offshore drilling muds (North Sea) & aquaculture feed binding</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Dynamic Scorecard Weights Control -->
+        <div class="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-sliders text-emerald-600"></i> Interactive Scorecard Weights (Drag to recalculate live)
+            </h3>
+            <span id="weight-sum-badge" class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Total: 100%</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-xs">
+            <!-- W1 -->
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>1. Market Size</span>
+                <span id="lbl-w-size" class="font-bold text-emerald-700">20%</span>
+              </div>
+              <input type="range" id="w-size" min="5" max="50" value="20" oninput="updateScorecard()" class="w-full">
+              <span class="text-[10px] text-slate-400">Total import value</span>
+            </div>
+
+            <!-- W2 -->
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>2. 5-Yr Growth</span>
+                <span id="lbl-w-growth" class="font-bold text-emerald-700">15%</span>
+              </div>
+              <input type="range" id="w-growth" min="5" max="50" value="15" oninput="updateScorecard()" class="w-full">
+              <span class="text-[10px] text-slate-400">CAGR momentum</span>
+            </div>
+
+            <!-- W3 -->
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>3. Unit Value</span>
+                <span id="lbl-w-val" class="font-bold text-emerald-700">30%</span>
+              </div>
+              <input type="range" id="w-val" min="5" max="50" value="30" oninput="updateScorecard()" class="w-full">
+              <span class="text-[10px] text-slate-400">Margin & premium</span>
+            </div>
+
+            <!-- W4 -->
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>4. Market Headroom</span>
+                <span id="lbl-w-headroom" class="font-bold text-emerald-700">20%</span>
+              </div>
+              <input type="range" id="w-headroom" min="5" max="50" value="20" oninput="updateScorecard()" class="w-full">
+              <span class="text-[10px] text-slate-400">100 - India share</span>
+            </div>
+
+            <!-- W5 -->
+            <div>
+              <div class="flex justify-between font-semibold mb-1">
+                <span>5. Access & Safety</span>
+                <span id="lbl-w-access" class="font-bold text-emerald-700">15%</span>
+              </div>
+              <input type="range" id="w-access" min="5" max="50" value="15" oninput="updateScorecard()" class="w-full">
+              <span class="text-[10px] text-slate-400">0% tariff & legal ease</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculated Scorecard Results & Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+          <div class="bg-white border rounded-xl overflow-hidden shadow-sm">
+            <div class="bg-slate-100 px-4 py-3 border-b flex justify-between items-center">
+              <h4 class="font-bold text-slate-800 text-sm">Live Scorecard Results</h4>
+              <span class="text-xs text-slate-500">Scores out of 100</span>
+            </div>
+            <div class="p-4 overflow-x-auto">
+              <table class="w-full text-xs text-left">
+                <thead class="bg-slate-50 border-b">
+                  <tr>
+                    <th class="p-2">Rank</th>
+                    <th class="p-2">Country</th>
+                    <th class="p-2">Weighted Score</th>
+                    <th class="p-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="scorecard-body" class="divide-y">
+                  <!-- Populated dynamically by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Chart Container -->
+          <div class="bg-white border rounded-xl p-4 shadow-sm h-64">
+            <canvas id="marketChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Strategic Rationale Box -->
+        <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200 text-xs text-blue-950 leading-relaxed">
+          <strong>Strategic Rationale for Choosing Germany:</strong> While the US is larger in volume, over 70% of US imports are consumed by oilfield drilling, which experiences catastrophic demand contractions whenever oil prices drop below $60/bbl. Germany offers the world's highest unit value realization ($4,850/MT), stable year-round food processing consumption, and massive headroom for Indian expansion (India holds only 46% share in Germany vs 83% in the US), as European food companies actively seek economical replacements for costly Mediterranean carob gum ($18,000/MT).
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 4: HOW MUCH (VOLUME & CAPACITY) -->
+    <!-- ========================================== -->
+    <section id="step-4" class="step-content hidden space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-center justify-between border-b pb-4 mb-6">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Step 4 of 6</span>
+            <h2 class="text-2xl font-bold text-slate-900">Volume Planning: Bottom-Up vs. Top-Down</h2>
+          </div>
+          <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
+            Realistic Year 1 Build-Up
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <!-- LEFT: Bottom-Up Controls -->
+          <div class="space-y-5 bg-slate-50 p-5 rounded-xl border border-slate-200">
+            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+              <i class="fa-solid fa-boxes-packing text-emerald-600"></i> Bottom-Up Operational Build-up
+            </h3>
+
+            <!-- Slider: Units per week / month -->
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span>Shipment Volume per Week:</span>
+                <span id="lbl-units-week" class="font-mono font-bold text-emerald-700">9.23 MT / week (2 FCLs / mo)</span>
+              </div>
+              <input type="range" id="input-units-week" min="2" max="30" step="0.5" value="9.23" oninput="recalcVolume()" class="w-full">
+              <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                <span>Low: 2 MT/wk (trial)</span>
+                <span>Target: 9.23 MT/wk</span>
+                <span>High: 30 MT/wk</span>
+              </div>
+            </div>
+
+            <!-- Slider: Operational Supply Duration -->
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span>Operational Duration:</span>
+                <span id="lbl-weeks-duration" class="font-mono font-bold text-emerald-700">52 Weeks (12 Months)</span>
+              </div>
+              <input type="range" id="input-weeks-duration" min="12" max="52" step="1" value="52" oninput="recalcVolume()" class="w-full">
+              <div class="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                <span>Seasonal: 12 wks</span>
+                <span>Half-Year: 26 wks</span>
+                <span>Full Year: 52 wks</span>
+              </div>
+            </div>
+
+            <!-- Calculated Volume Metric -->
+            <div class="bg-white p-4 rounded-lg border border-slate-200 flex items-center justify-between">
+              <div>
+                <span class="text-xs text-slate-500 font-semibold block uppercase">Total Planned Year 1 Export</span>
+                <span id="calc-bottomup-vol" class="text-2xl font-extrabold text-slate-900">480 MT</span>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-slate-500 font-semibold block uppercase">Container Load</span>
+                <span id="calc-containers" class="text-lg font-bold text-emerald-700">24 x 20ft FCLs</span>
+              </div>
+            </div>
+
+            <!-- Packaging specs -->
+            <div class="text-xs text-slate-600 space-y-1 bg-emerald-50/50 p-3 rounded border border-emerald-100">
+              <div class="font-bold text-emerald-900">Packaging Specification:</div>
+              <div>• 25 kg multi-wall kraft paper bags with inner polyethylene moisture liner.</div>
+              <div>• 40 bags per heat-treated wooden pallet (ISPM-15 certified) = 1.0 MT/pallet.</div>
+              <div>• 20 pallets per 20ft standard ocean container = 20.0 MT per container.</div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Top-Down Reality Check -->
+          <div class="space-y-5 bg-slate-50 p-5 rounded-xl border border-slate-200">
+            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+              <i class="fa-solid fa-earth-americas text-cyan-600"></i> Top-Down Market Sanity Check
+            </h3>
+
+            <div class="bg-white p-4 rounded-lg border border-slate-200 space-y-3 text-xs">
+              <div class="flex justify-between pb-2 border-b">
+                <span class="text-slate-500">Chosen Market:</span>
+                <span id="td-market-name" class="font-bold text-slate-800">Germany</span>
+              </div>
+              <div class="flex justify-between pb-2 border-b">
+                <span class="text-slate-500">Total German Imports (HS 130232):</span>
+                <span class="font-mono font-bold text-slate-800">$118.2M (~24,370 MT)</span>
+              </div>
+              <div class="flex justify-between pb-2 border-b">
+                <span class="text-slate-500">Our Planned Year 1 Volume:</span>
+                <span id="td-our-vol" class="font-mono font-bold text-emerald-700">480 MT</span>
+              </div>
+              <div class="flex justify-between items-center pt-1">
+                <span class="text-slate-700 font-bold">Resulting Market Share (%):</span>
+                <span id="td-share-percent" class="text-xl font-extrabold text-purple-700 font-mono">1.97%</span>
+              </div>
+            </div>
+
+            <!-- Sanity Status Card -->
+            <div id="sanity-card" class="p-4 rounded-lg border bg-emerald-100 border-emerald-300 text-emerald-900 text-xs leading-relaxed">
+              <div class="font-bold flex items-center gap-1.5 text-sm mb-1">
+                <i class="fa-solid fa-circle-check text-emerald-600"></i> Highly Feasible & Realistic (< 2.5% Share)
+              </div>
+              Capturing ~1.97% of the German market requires securing contracts with only 2–3 medium-sized regional food ingredient distributors in Germany (e.g., in Hamburg, Dortmund, or Nuremberg). It creates zero disruption to market prices and triggers no anti-competitive backlash.
+            </div>
+
+            <div class="text-xs text-slate-500 italic">
+              Note: If planned volume exceeds 5% of target market imports, the model flags heightened buyer-concentration and commercial pushback risk.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 5: MONEY & RISK (FINANCIAL MODEL & STRESS TEST) -->
+    <!-- ========================================== -->
+    <section id="step-5" class="step-content hidden space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex flex-wrap items-center justify-between border-b pb-4 mb-6 gap-2">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Step 5 of 6</span>
+            <h2 class="text-2xl font-bold text-slate-900">Unit Economics, Break-Even & Stress Tests</h2>
+          </div>
+          <!-- Preset Stress Scenarios -->
+          <div class="flex items-center gap-2">
+            <button onclick="setScenario('base')" id="btn-scen-base" class="px-2.5 py-1 text-xs font-bold rounded bg-emerald-600 text-white shadow">
+              Baseline
+            </button>
+            <button onclick="setScenario('pess1')" id="btn-scen-pess1" class="px-2.5 py-1 text-xs font-bold rounded bg-slate-200 text-slate-700 hover:bg-slate-300">
+              Pessimistic 1 (Demand Shock)
+            </button>
+            <button onclick="setScenario('pess2')" id="btn-scen-pess2" class="px-2.5 py-1 text-xs font-bold rounded bg-slate-200 text-slate-700 hover:bg-slate-300">
+              Pessimistic 2 (Supply Shock)
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 Interactive Input Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-5 rounded-xl border border-slate-200 mb-6">
+          
+          <!-- Selling Price -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-slate-800 mb-1">
+              <span>Export Selling Price (CIF / MT):</span>
+              <span id="lbl-price" class="text-emerald-700 font-mono font-extrabold text-sm">$3,200</span>
+            </div>
+            <input type="range" id="input-price" min="2000" max="4500" step="50" value="3200" oninput="recalcFinance()" class="w-full">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>Discounted ($2,000)</span>
+              <span>Baseline ($3,200)</span>
+              <span>Premium ($4,500)</span>
+            </div>
+          </div>
+
+          <!-- Variable Cost per Unit -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-slate-800 mb-1">
+              <span>Variable Cost per Unit (CIF / MT):</span>
+              <span id="lbl-cost-unit" class="text-rose-700 font-mono font-extrabold text-sm">$2,430</span>
+            </div>
+            <input type="range" id="input-cost-unit" min="1600" max="3200" step="25" value="2430" oninput="recalcFinance()" class="w-full">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>Lean ($1,600)</span>
+              <span>Baseline ($2,430)</span>
+              <span>Cost Surge ($3,200)</span>
+            </div>
+          </div>
+
+          <!-- Fixed Costs -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-slate-800 mb-1">
+              <span>Annual Fixed Overhead Costs:</span>
+              <span id="lbl-fixed-cost" class="text-amber-700 font-mono font-extrabold text-sm">$140,000</span>
+            </div>
+            <input type="range" id="input-fixed-cost" min="60000" max="250000" step="5000" value="140000" oninput="recalcFinance()" class="w-full">
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>Low ($60k)</span>
+              <span>Baseline ($140k)</span>
+              <span>High Exp ($250k)</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Financial Statement & Break-Even Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          
+          <!-- P&L Table (Col 1 & 2) -->
+          <div class="lg:col-span-2 bg-white border rounded-xl overflow-hidden shadow-sm">
+            <div class="bg-slate-100 px-4 py-3 border-b flex justify-between items-center">
+              <h4 class="font-bold text-slate-800 text-sm">Year 1 Income Statement (Live Recalculation)</h4>
+              <span id="pnl-status-badge" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded">
+                Healthy EBIT
+              </span>
+            </div>
+            <div class="p-4 text-xs">
+              <table class="w-full text-left">
+                <tbody class="divide-y text-slate-700">
+                  <tr>
+                    <td class="py-2 text-slate-500">Planned Export Volume</td>
+                    <td id="fin-vol" class="py-2 text-right font-mono font-bold">480 MT</td>
+                  </tr>
+                  <tr class="bg-emerald-50/30">
+                    <td class="py-2 font-bold text-slate-800">Gross Export Revenue (Price x Volume)</td>
+                    <td id="fin-rev" class="py-2 text-right font-mono font-extrabold text-emerald-700">$1,536,000</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 text-slate-500">Total Variable Costs (Unit Cost x Volume)</td>
+                    <td id="fin-var-cost" class="py-2 text-right font-mono text-rose-600">-$1,166,400</td>
+                  </tr>
+                  <tr class="font-semibold bg-slate-50">
+                    <td class="py-2 text-slate-800">Total Contribution Margin (CM)</td>
+                    <td id="fin-cm" class="py-2 text-right font-mono font-bold text-slate-900">$369,600</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 text-slate-500">Unit Contribution Margin & CM Ratio</td>
+                    <td id="fin-unit-cm" class="py-2 text-right font-mono text-slate-700">$770 / MT (24.1%)</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 text-slate-500">Annual Fixed Overheads (Audits, Trade Fairs, ECGC)</td>
+                    <td id="fin-fixed" class="py-2 text-right font-mono text-amber-700">-$140,000</td>
+                  </tr>
+                  <tr class="bg-emerald-100/60 font-extrabold text-sm border-t-2 border-emerald-400">
+                    <td class="py-3 text-emerald-950">Net Operating Profit (EBIT)</td>
+                    <td id="fin-ebit" class="py-3 text-right font-mono text-emerald-800">+$229,600</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 text-slate-500">Operating Profit Margin</td>
+                    <td id="fin-margin" class="py-2 text-right font-mono font-bold text-emerald-700">14.95%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Break-Even Card (Col 3) -->
+          <div class="bg-slate-50 border rounded-xl p-5 flex flex-col justify-between">
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-scale-balanced text-violet-600"></i> Break-Even Analysis
+              </h4>
+
+              <div class="space-y-4 text-xs">
+                <div class="bg-white p-3 rounded border border-slate-200">
+                  <span class="text-slate-500 block">Break-Even Volume (Fixed / Unit CM)</span>
+                  <span id="be-vol" class="text-xl font-extrabold text-violet-700 font-mono">181.8 MT</span>
+                  <span id="be-containers" class="text-[10px] text-slate-400 block mt-0.5">Approx. 9.1 Containers</span>
+                </div>
+
+                <div class="bg-white p-3 rounded border border-slate-200">
+                  <span class="text-slate-500 block">Break-Even Revenue</span>
+                  <span id="be-rev" class="text-xl font-extrabold text-violet-900 font-mono">$581,818</span>
+                </div>
+
+                <div class="bg-white p-3 rounded border border-slate-200">
+                  <span class="text-slate-500 block">Margin of Safety (%)</span>
+                  <span id="be-safety" class="text-xl font-extrabold text-emerald-600 font-mono">62.1%</span>
+                  <span class="text-[10px] text-slate-400 block mt-0.5">Sales can drop 62% before loss</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t text-[11px] text-slate-500 italic">
+              A high margin of safety (62%) ensures substantial resilience against seasonal crop and market shocks.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- STRESS TEST BENCHMARK BOX (2 Pessimistic Scenarios) -->
+        <div class="bg-rose-50/70 border border-rose-200 rounded-xl p-5">
+          <h4 class="font-bold text-rose-900 text-sm mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation text-rose-600"></i> Pessimistic Stress Testing Scenarios
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <!-- Scenario 1 -->
+            <div class="bg-white p-4 rounded-lg border border-rose-200 shadow-sm">
+              <div class="font-bold text-slate-900 mb-1 flex justify-between">
+                <span>Pessimistic Scenario 1: European Demand Slump</span>
+                <span class="text-rose-600 font-bold">-12% Price, -15% Vol</span>
+              </div>
+              <p class="text-slate-600 mb-2">
+                European economic slowdown pushes German food processors to demand price cuts (Price drops to $2,816/MT) and shipments slow to 408 MT.
+              </p>
+              <div class="bg-slate-50 p-2 rounded flex justify-between font-mono text-xs">
+                <span>Recalculated Profit:</span>
+                <span class="font-bold text-emerald-700">+$17,488 (Black)</span>
+              </div>
+            </div>
+
+            <!-- Scenario 2 -->
+            <div class="bg-white p-4 rounded-lg border border-rose-200 shadow-sm">
+              <div class="font-bold text-slate-900 mb-1 flex justify-between">
+                <span>Pessimistic Scenario 2: Crop Drought & Freight Crisis</span>
+                <span class="text-rose-600 font-bold">+18% Cost, +$60 Freight</span>
+              </div>
+              <p class="text-slate-600 mb-2">
+                Monsoon deficit spikes raw split prices to $2,220/MT, while Red Sea rerouting adds $60/MT freight (Total Variable Cost = $2,850/MT; Vol = 420 MT).
+              </p>
+              <div class="bg-slate-50 p-2 rounded flex justify-between font-mono text-xs">
+                <span>Recalculated Profit:</span>
+                <span class="font-bold text-emerald-700">+$7,000 (Black)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STEP 6: CAN WE GET IN & THE PLAN (ACCESS) -->
+    <!-- ========================================== -->
+    <section id="step-6" class="step-content hidden space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-center justify-between border-b pb-4 mb-6">
+          <div>
+            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Step 6 of 6</span>
+            <h2 class="text-2xl font-bold text-slate-900">Market Access, NTMs, Logistics & Risk Plan</h2>
+          </div>
+          <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
+            Tariffs & NTM Compliance
+          </span>
+        </div>
+
+        <!-- Tariffs Comparison Table -->
+        <div class="mb-6">
+          <h3 class="font-bold text-slate-800 text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-file-invoice-dollar text-emerald-600"></i> Tariff Parity Analysis (Germany / EU Market)
+          </h3>
+          <div class="overflow-x-auto border rounded-lg">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-100 border-b text-slate-700">
+                <tr>
+                  <th class="p-2.5">Origin Country</th>
+                  <th class="p-2.5">MFN Tariff</th>
+                  <th class="p-2.5">Preferential Tariff</th>
+                  <th class="p-2.5">Trade Agreement / Scheme</th>
+                  <th class="p-2.5">Competitive Impact</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y text-slate-700">
+                <tr class="bg-emerald-50/40">
+                  <td class="p-2.5 font-bold text-emerald-900">India</td>
+                  <td class="p-2.5 font-mono font-bold">0.0%</td>
+                  <td class="p-2.5 font-mono font-bold text-emerald-700">0.0%</td>
+                  <td class="p-2.5">MFN Duty-Free under TARIC 1302.32.90</td>
+                  <td class="p-2.5 font-bold text-emerald-700">Full zero-duty market access</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium">Pakistan (Rival 1)</td>
+                  <td class="p-2.5 font-mono">0.0%</td>
+                  <td class="p-2.5 font-mono">0.0%</td>
+                  <td class="p-2.5">EU GSP+ Status</td>
+                  <td class="p-2.5 text-slate-500">Tariff parity; zero cost advantage</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium">Spain (Rival 2)</td>
+                  <td class="p-2.5 font-mono">0.0%</td>
+                  <td class="p-2.5 font-mono">0.0%</td>
+                  <td class="p-2.5">Intra-EU Single Market</td>
+                  <td class="p-2.5 text-slate-500">Zero duty; competes in carob gum</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-medium">China (Rival 3)</td>
+                  <td class="p-2.5 font-mono">0.0%</td>
+                  <td class="p-2.5 font-mono">0.0%</td>
+                  <td class="p-2.5">Standard MFN Rate</td>
+                  <td class="p-2.5 text-slate-500">Tariff parity</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-500 mt-1 italic">
+            *Conclusion: Complete tariff parity means the exporter cannot win on import duty advantages. The differentiator is NTM compliance, quality consistency, and batch-to-batch chemical purity.
+          </p>
+        </div>
+
+        <!-- 3 NTMs That Matter Most -->
+        <div class="mb-6">
+          <h3 class="font-bold text-slate-800 text-sm mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-check text-rose-600"></i> 14 Non-Tariff Measures (NTMs): The 3 That Matter Most
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            
+            <div class="bg-rose-50 border border-rose-200 p-4 rounded-lg">
+              <span class="bg-rose-200 text-rose-800 font-bold text-[10px] px-2 py-0.5 rounded">NTM 1: SPS Emergency Control</span>
+              <h4 class="font-bold text-slate-900 mt-2 mb-1">Commission Reg (EU) 2019/1793</h4>
+              <p class="text-slate-600 mb-2">
+                Mandatory testing for <strong>Pentachlorophenol (PCP) and Dioxins</strong>. Every Indian shipment must carry an official Health Certificate from the Export Inspection Council (EIC) confirming PCP &lt; 0.01 mg/kg.
+              </p>
+              <div class="text-[10px] text-rose-900 font-bold bg-white p-2 rounded border border-rose-200">
+                Action: Dual pre-shipment GC-MS testing via Eurofins/EIC approved labs.
+              </div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+              <span class="bg-amber-200 text-amber-800 font-bold text-[10px] px-2 py-0.5 rounded">NTM 2: SPS Chemical Residue</span>
+              <h4 class="font-bold text-slate-900 mt-2 mb-1">Ethylene Oxide (EtO) Prohibition</h4>
+              <p class="text-slate-600 mb-2">
+                EU Regulation (EC) 396/2005 sets a strict limit of <strong>&lt; 0.02 mg/kg</strong> for EtO. Multiple Indian food consignments have faced rapid border rejections due to EtO fumigation.
+              </p>
+              <div class="text-[10px] text-amber-900 font-bold bg-white p-2 rounded border border-amber-200">
+                Action: 100% ban on gas fumigation; utilize validated dry steam sterilization.
+              </div>
+            </div>
+
+            <div class="bg-cyan-50 border border-cyan-200 p-4 rounded-lg">
+              <span class="bg-cyan-200 text-cyan-800 font-bold text-[10px] px-2 py-0.5 rounded">NTM 3: TBT Food Additive</span>
+              <h4 class="font-bold text-slate-900 mt-2 mb-1">Commission Reg (EU) No 231/2012</h4>
+              <p class="text-slate-600 mb-2">
+                Strict purity criteria for food additive <strong>E412</strong>: Galactomannan &gt; 75%, Acid-insoluble matter &lt; 7%, Total protein &lt; 10%, Arsenic &lt; 3ppm, Lead &lt; 2ppm.
+              </p>
+              <div class="text-[10px] text-cyan-900 font-bold bg-white p-2 rounded border border-cyan-200">
+                Action: In-house automated NIR spectroscopy batch grading in Jodhpur mill.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Logistics & Risk Matrix -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          <!-- Logistics -->
+          <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs">
+            <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-truck-fast text-emerald-600"></i> Route & Logistics Milestones (32–36 Days)
+            </h4>
+            <ol class="relative border-l border-emerald-300 ml-2 space-y-4">
+              <li class="ml-4">
+                <span class="absolute -left-1.5 mt-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
+                <strong class="text-slate-800">Processing & Lab Testing (Days 1–4):</strong> Jodhpur Mill, Rajasthan. Automated pulverization, 200 mesh grading, pre-shipment EIC test.
+              </li>
+              <li class="ml-4">
+                <span class="absolute -left-1.5 mt-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
+                <strong class="text-slate-800">Inland Rail Pre-Carriage (Days 5–7):</strong> Bhagat Ki Kothi ICD (Jodhpur) to Port of Mundra, Gujarat via dedicated freight corridor.
+              </li>
+              <li class="ml-4">
+                <span class="absolute -left-1.5 mt-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
+                <strong class="text-slate-800">Ocean Transit (Days 8–34):</strong> Port of Mundra to Port of Hamburg, Germany (via container carrier, e.g. Hapag-Lloyd/Maersk).
+              </li>
+              <li class="ml-4">
+                <span class="absolute -left-1.5 mt-1 w-3 h-3 bg-emerald-500 rounded-full"></span>
+                <strong class="text-slate-800">Customs Clearance & Storage (Days 35–37):</strong> Hamburg Port Border Inspection Post (BIP) clearance; transfer to temperature-controlled bonded warehouse in Bremen.
+              </li>
+            </ol>
+          </div>
+
+          <!-- Risk Mitigation -->
+          <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs">
+            <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+              <i class="fa-solid fa-shield-virus text-purple-600"></i> Critical Risks & Contingency Actions
+            </h4>
+            <div class="space-y-2.5">
+              <div class="p-2 bg-white rounded border border-slate-200">
+                <span class="font-bold text-rose-700">1. Pesticide/EtO Border Alert:</span>
+                <span class="text-slate-600 block mt-0.5">Dual-sample archive system; hold pre-cleared backup lots in Hamburg warehouse.</span>
+              </div>
+              <div class="p-2 bg-white rounded border border-slate-200">
+                <span class="font-bold text-amber-700">2. Raw Seed Crop Drought in Rajasthan:</span>
+                <span class="text-slate-600 block mt-0.5">Procure 3-month raw split inventory during peak post-harvest arrivals (Nov–Dec) + NCDEX commodity hedging.</span>
+              </div>
+              <div class="p-2 bg-white rounded border border-slate-200">
+                <span class="font-bold text-cyan-700">3. Red Sea Maritime Freight Rerouting:</span>
+                <span class="text-slate-600 block mt-0.5">Hold 60-day safety stock buffer at German distribution hub to ensure uninterrupted client supply.</span>
+              </div>
+              <div class="p-2 bg-white rounded border border-slate-200">
+                <span class="font-bold text-purple-700">4. Foreign Buyer Insolvency:</span>
+                <span class="text-slate-600 block mt-0.5">Comprehensive ECGC export credit insurance covering 90% of commercial invoice value.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 text-slate-400 py-6 text-xs border-t border-slate-800 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <p class="font-semibold text-slate-200">Trade Analytics Individual Assignment: Export Business Model</p>
+        <p class="text-slate-500">Student: Gauri Mahendru (DM271025) | Product: Guar Gum (HS 130232)</p>
+      </div>
+      <div class="text-slate-400 text-center sm:text-right">
+        <p>Built with Tailwind CSS, Chart.js & Vanilla JavaScript</p>
+        <p class="text-emerald-400 font-mono">Submission Deadline: Dec 04, 2026</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT ENGINE -->
+  <script>
+    // --- 1. DATA REPOSITORY (Trade Map / MacMap Verified) ---
+    const marketsData = [
+      { id: 'USA', name: 'United States', flag: '🇺🇸', importVal: 265.4, growth: 6.8, unitVal: 2150, indShare: 82.5, access: 8.5 },
+      { id: 'DEU', name: 'Germany', flag: '🇩🇪', importVal: 118.2, growth: 4.2, unitVal: 4850, indShare: 46.2, access: 9.0 },
+      { id: 'CHN', name: 'China', flag: '🇨🇳', importVal: 78.0, growth: 8.5, unitVal: 1420, indShare: 89.1, access: 7.0 },
+      { id: 'RUS', name: 'Russia', flag: '🇷🇺', importVal: 48.5, growth: 11.2, unitVal: 2050, indShare: 91.0, access: 4.0 },
+      { id: 'NOR', name: 'Norway', flag: '🇳🇴', importVal: 34.1, growth: 5.1, unitVal: 2480, indShare: 78.4, access: 9.0 }
+    ];
+
+    // State Variables
+    let currentStep = 1;
+    let chosenMarket = 'Germany';
+    let marketChart = null;
+
+    // --- 2. STEP NAVIGATION ---
+    function showStep(step) {
+      currentStep = step;
+      document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+
+      const target = document.getElementById(`step-${step}`);
+      const targetBtn = document.getElementById(`tab-${step}`);
+      if (target) target.classList.remove('hidden');
+      if (targetBtn) targetBtn.classList.add('active-tab');
+
+      if (step === 3 && marketChart) {
+        setTimeout(() => marketChart.resize(), 100);
+      }
+    }
+
+    // --- 3. SCORECARD CALCULATION ---
+    function updateScorecard() {
+      const wSize = parseFloat(document.getElementById('w-size').value);
+      const wGrowth = parseFloat(document.getElementById('w-growth').value);
+      const wVal = parseFloat(document.getElementById('w-val').value);
+      const wHeadroom = parseFloat(document.getElementById('w-headroom').value);
+      const wAccess = parseFloat(document.getElementById('w-access').value);
+
+      const totalWeight = wSize + wGrowth + wVal + wHeadroom + wAccess;
+      document.getElementById('weight-sum-badge').innerText = `Total: ${Math.round(totalWeight)}%`;
+      document.getElementById('lbl-w-size').innerText = `${wSize}%`;
+      document.getElementById('lbl-w-growth').innerText = `${wGrowth}%`;
+      document.getElementById('lbl-w-val').innerText = `${wVal}%`;
+      document.getElementById('lbl-w-headroom').innerText = `${wHeadroom}%`;
+      document.getElementById('lbl-w-access').innerText = `${wAccess}%`;
+
+      // Normalization helpers (Scale 1-10)
+      const scoredMarkets = marketsData.map(m => {
+        const sSize = (m.importVal / 265.4) * 10;
+        const sGrowth = (m.growth / 11.2) * 10;
+        const sVal = (m.unitVal / 4850) * 10;
+        const sHeadroom = ((100 - m.indShare) / (100 - 46.2)) * 10;
+        const sAccess = m.access;
+
+        const weightedScore = (
+          (sSize * wSize) +
+          (sGrowth * wGrowth) +
+          (sVal * wVal) +
+          (sHeadroom * wHeadroom) +
+          (sAccess * wAccess)
+        ) / (totalWeight / 10);
+
+        return { ...m, score: weightedScore };
+      });
+
+      scoredMarkets.sort((a, b) => b.score - a.score);
+
+      // Render Table
+      const tbody = document.getElementById('scorecard-body');
+      tbody.innerHTML = '';
+      scoredMarkets.forEach((m, idx) => {
+        const isChosen = (m.name === chosenMarket);
+        const row = document.createElement('tr');
+        row.className = isChosen ? 'bg-emerald-50 font-bold' : 'hover:bg-slate-50';
+        row.innerHTML = `
+          <td class="p-2 font-mono font-bold ${idx === 0 ? 'text-emerald-700' : 'text-slate-600'}">#${idx + 1}</td>
+          <td class="p-2 flex items-center gap-1.5">
+            <span>${m.flag}</span> <span>${m.name}</span>
+          </td>
+          <td class="p-2 font-mono font-bold text-slate-800">${m.score.toFixed(1)} / 100</td>
+          <td class="p-2">
+            <button onclick="selectMarket('${m.name}')" class="px-2 py-0.5 rounded text-[10px] font-bold ${isChosen ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
+              ${isChosen ? 'Selected' : 'Select'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Update Chart
+      renderMarketChart(scoredMarkets);
+    }
+
+    function selectMarket(marketName) {
+      chosenMarket = marketName;
+      document.getElementById('sum-market').innerText = marketName;
+      document.getElementById('td-market-name').innerText = marketName;
+      updateScorecard();
+      recalcVolume();
+    }
+
+    function applyPresetWeights(preset) {
+      if (preset === 'value') {
+        document.getElementById('w-size').value = 20;
+        document.getElementById('w-growth').value = 15;
+        document.getElementById('w-val').value = 30;
+        document.getElementById('w-headroom').value = 20;
+        document.getElementById('w-access').value = 15;
+      } else {
+        // Volume preset
+        document.getElementById('w-size').value = 35;
+        document.getElementById('w-growth').value = 20;
+        document.getElementById('w-val').value = 10;
+        document.getElementById('w-headroom').value = 15;
+        document.getElementById('w-access').value = 20;
+      }
+      updateScorecard();
+    }
+
+    function renderMarketChart(scoredList) {
+      const ctx = document.getElementById('marketChart').getContext('2d');
+      const labels = scoredList.map(m => m.name);
+      const data = scoredList.map(m => m.score.toFixed(1));
+
+      if (marketChart) {
+        marketChart.data.labels = labels;
+        marketChart.data.datasets[0].data = data;
+        marketChart.update();
+      } else {
+        marketChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Market Suitability Score (out of 100)',
+              data: data,
+              backgroundColor: ['#16a34a', '#0284c7', '#8b5cf6', '#f59e0b', '#64748b'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: { beginAtZero: true, max: 100 }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+    }
+
+    // --- 4. VOLUME RECALCULATION ---
+    function recalcVolume() {
+      const unitsPerWeek = parseFloat(document.getElementById('input-units-week').value);
+      const weeksDuration = parseInt(document.getElementById('input-weeks-duration').value);
+
+      document.getElementById('lbl-units-week').innerText = `${unitsPerWeek.toFixed(1)} MT / week`;
+      document.getElementById('lbl-weeks-duration').innerText = `${weeksDuration} Weeks (${(weeksDuration/4.33).toFixed(1)} Months)`;
+
+      const totalVolume = Math.round(unitsPerWeek * weeksDuration);
+      const containers = (totalVolume / 20).toFixed(1);
+
+      document.getElementById('calc-bottomup-vol').innerText = `${totalVolume} MT`;
+      document.getElementById('calc-containers').innerText = `${containers} x 20ft FCLs`;
+      document.getElementById('sum-volume').innerText = `${totalVolume} MT`;
+      document.getElementById('fin-vol').innerText = `${totalVolume} MT`;
+      document.getElementById('td-our-vol').innerText = `${totalVolume} MT`;
+
+      // Top down check
+      const market = marketsData.find(m => m.name === chosenMarket) || marketsData[1];
+      const marketEstVolume = (market.importVal * 1000000) / market.unitVal; // in MT
+      const share = (totalVolume / marketEstVolume) * 100;
+      document.getElementById('td-share-percent').innerText = `${share.toFixed(2)}%`;
+
+      const sanityCard = document.getElementById('sanity-card');
+      if (share <= 2.5) {
+        sanityCard.className = "p-4 rounded-lg border bg-emerald-100 border-emerald-300 text-emerald-900 text-xs leading-relaxed";
+        sanityCard.innerHTML = `<div class="font-bold flex items-center gap-1.5 text-sm mb-1"><i class="fa-solid fa-circle-check text-emerald-600"></i> Highly Feasible & Realistic (${share.toFixed(2)}% Share)</div>Capturing ${share.toFixed(2)}% requires securing supply contracts with only 2–3 regional distributors. It creates zero market distortion and low buyer concentration risk.`;
+      } else if (share <= 5.0) {
+        sanityCard.className = "p-4 rounded-lg border bg-amber-100 border-amber-300 text-amber-900 text-xs leading-relaxed";
+        sanityCard.innerHTML = `<div class="font-bold flex items-center gap-1.5 text-sm mb-1"><i class="fa-solid fa-triangle-exclamation text-amber-600"></i> Moderate Market Penetration (${share.toFixed(2)}% Share)</div>Target volume represents a noticeable portion of market imports. Requires active multi-distributor sales channels.`;
+      } else {
+        sanityCard.className = "p-4 rounded-lg border bg-rose-100 border-rose-300 text-rose-900 text-xs leading-relaxed";
+        sanityCard.innerHTML = `<div class="font-bold flex items-center gap-1.5 text-sm mb-1"><i class="fa-solid fa-circle-xmark text-rose-600"></i> Aggressive Market Penetration (${share.toFixed(2)}% Share)</div>Exceeds 5% of target market volume. High risk of distributor resistance and margin compression.`;
+      }
+
+      recalcFinance();
+    }
+
+    // --- 5. FINANCIAL RECALCULATION & BREAK-EVEN ---
+    function recalcFinance() {
+      const price = parseFloat(document.getElementById('input-price').value);
+      const unitCost = parseFloat(document.getElementById('input-cost-unit').value);
+      const fixedCosts = parseFloat(document.getElementById('input-fixed-cost').value);
+
+      document.getElementById('lbl-price').innerText = `$${price.toLocaleString()}`;
+      document.getElementById('lbl-cost-unit').innerText = `$${unitCost.toLocaleString()}`;
+      document.getElementById('lbl-fixed-cost').innerText = `$${fixedCosts.toLocaleString()}`;
+
+      const unitsPerWeek = parseFloat(document.getElementById('input-units-week').value);
+      const weeksDuration = parseInt(document.getElementById('input-weeks-duration').value);
+      const volume = Math.round(unitsPerWeek * weeksDuration);
+
+      const grossRevenue = volume * price;
+      const totalVarCost = volume * unitCost;
+      const unitCM = price - unitCost;
+      const totalCM = volume * unitCM;
+      const netProfit = totalCM - fixedCosts;
+      const profitMargin = (netProfit / grossRevenue) * 100;
+
+      // Update P&L table
+      document.getElementById('fin-rev').innerText = `$${grossRevenue.toLocaleString()}`;
+      document.getElementById('fin-var-cost').innerText = `-$${totalVarCost.toLocaleString()}`;
+      document.getElementById('fin-cm').innerText = `$${totalCM.toLocaleString()}`;
+      document.getElementById('fin-unit-cm').innerText = `$${unitCM.toFixed(0)} / MT (${((unitCM/price)*100).toFixed(1)}%)`;
+      document.getElementById('fin-fixed').innerText = `-$${fixedCosts.toLocaleString()}`;
+      
+      const ebitElem = document.getElementById('fin-ebit');
+      const badgeElem = document.getElementById('pnl-status-badge');
+      if (netProfit >= 0) {
+        ebitElem.innerText = `+$${netProfit.toLocaleString()}`;
+        ebitElem.className = 'py-3 text-right font-mono text-emerald-800 font-extrabold';
+        badgeElem.className = 'bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded';
+        badgeElem.innerText = 'Profitable EBIT';
+      } else {
+        ebitElem.innerText = `-$${Math.abs(netProfit).toLocaleString()}`;
+        ebitElem.className = 'py-3 text-right font-mono text-rose-700 font-extrabold';
+        badgeElem.className = 'bg-rose-100 text-rose-800 text-xs font-bold px-2 py-0.5 rounded';
+        badgeElem.innerText = 'Operating Loss';
+      }
+      document.getElementById('fin-margin').innerText = `${profitMargin.toFixed(2)}%`;
+
+      // Break-even
+      let beVolume = 0;
+      let beRevenue = 0;
+      let marginOfSafety = 0;
+      if (unitCM > 0) {
+        beVolume = fixedCosts / unitCM;
+        beRevenue = beVolume * price;
+        marginOfSafety = ((volume - beVolume) / volume) * 100;
+        document.getElementById('be-vol').innerText = `${beVolume.toFixed(1)} MT`;
+        document.getElementById('be-containers').innerText = `Approx. ${(beVolume/20).toFixed(1)} Containers`;
+        document.getElementById('be-rev').innerText = `$${Math.round(beRevenue).toLocaleString()}`;
+        document.getElementById('be-safety').innerText = `${marginOfSafety.toFixed(1)}%`;
+      } else {
+        document.getElementById('be-vol').innerText = `N/A (Loss)`;
+        document.getElementById('be-containers').innerText = `Contribution Margin is Negative`;
+        document.getElementById('be-rev').innerText = `N/A`;
+        document.getElementById('be-safety').innerText = `0%`;
+      }
+
+      // Update Sticky Top Summary Panel
+      document.getElementById('sum-revenue').innerText = `$${grossRevenue.toLocaleString()}`;
+      document.getElementById('sum-costs').innerText = `$${(totalVarCost + fixedCosts).toLocaleString()}`;
+      document.getElementById('sum-profit').innerText = `${netProfit >= 0 ? '+' : '-'}$${Math.abs(netProfit).toLocaleString()} (${profitMargin.toFixed(1)}%)`;
+      document.getElementById('sum-profit').className = netProfit >= 0 ? 'text-sm font-bold text-emerald-300' : 'text-sm font-bold text-rose-300';
+      document.getElementById('sum-bep').innerText = `${beVolume > 0 ? beVolume.toFixed(1) + ' MT' : 'Negative CM'}`;
+
+      // Calculate Worst Case Profit
+      // Scenario 1: Price -12%, Vol -15%
+      const p1_price = price * 0.88;
+      const p1_vol = volume * 0.85;
+      const p1_cm = (p1_price - unitCost) * p1_vol;
+      const p1_profit = Math.round(p1_cm - fixedCosts);
+
+      // Scenario 2: Cost +18%, Vol -10%
+      const p2_cost = unitCost * 1.18;
+      const p2_vol = volume * 0.90;
+      const p2_cm = (price - p2_cost) * p2_vol;
+      const p2_profit = Math.round(p2_cm - fixedCosts);
+
+      const worstProfit = Math.min(p1_profit, p2_profit);
+      const sumWorst = document.getElementById('sum-worst');
+      sumWorst.innerText = `${worstProfit >= 0 ? '+' : '-'}$${Math.abs(worstProfit).toLocaleString()}`;
+      sumWorst.className = worstProfit >= 0 ? 'text-sm font-bold text-emerald-400' : 'text-sm font-bold text-rose-400';
+    }
+
+    // --- 6. SCENARIO PRESETS ---
+    function setScenario(scen) {
+      document.querySelectorAll('#btn-scen-base, #btn-scen-pess1, #btn-scen-pess2').forEach(b => {
+        b.className = 'px-2.5 py-1 text-xs font-bold rounded bg-slate-200 text-slate-700 hover:bg-slate-300';
+      });
+
+      if (scen === 'base') {
+        document.getElementById('btn-scen-base').className = 'px-2.5 py-1 text-xs font-bold rounded bg-emerald-600 text-white shadow';
+        document.getElementById('input-price').value = 3200;
+        document.getElementById('input-cost-unit').value = 2430;
+        document.getElementById('input-fixed-cost').value = 140000;
+        document.getElementById('input-units-week').value = 9.23;
+        document.getElementById('input-weeks-duration').value = 52;
+      } else if (scen === 'pess1') {
+        document.getElementById('btn-scen-pess1').className = 'px-2.5 py-1 text-xs font-bold rounded bg-rose-600 text-white shadow';
+        // Price drops 12% to $2816, volume drops 15%
+        document.getElementById('input-price').value = 2816;
+        document.getElementById('input-cost-unit').value = 2430;
+        document.getElementById('input-fixed-cost').value = 140000;
+        document.getElementById('input-units-week').value = 7.85; // 408 MT / 52
+        document.getElementById('input-weeks-duration').value = 52;
+      } else if (scen === 'pess2') {
+        document.getElementById('btn-scen-pess2').className = 'px-2.5 py-1 text-xs font-bold rounded bg-rose-600 text-white shadow';
+        // Variable cost rises to $2850, volume drops 12.5%
+        document.getElementById('input-price').value = 3200;
+        document.getElementById('input-cost-unit').value = 2850;
+        document.getElementById('input-fixed-cost').value = 140000;
+        document.getElementById('input-units-week').value = 8.08; // 420 MT / 52
+        document.getElementById('input-weeks-duration').value = 52;
+      }
+
+      recalcVolume();
+    }
+
+    function resetDefaults() {
+      applyPresetWeights('value');
+      selectMarket('Germany');
+      setScenario('base');
+      showStep(1);
+    }
+
+    // --- INITIALIZATION ---
+    window.onload = function() {
+      updateScorecard();
+      recalcVolume();
+    };
+  </script>
+</body>
+</html>
